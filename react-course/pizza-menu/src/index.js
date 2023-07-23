@@ -9,7 +9,7 @@ const pizzaData = [
 		ingredients: "Bread with italian olive oil and rosemary",
 		price: 6,
 		photoName: "pizzas/focaccia.jpg",
-		soldOut: false,
+		soldOut: true,
 	},
 	{
 		name: "Pizza Margherita",
@@ -48,7 +48,6 @@ const pizzaData = [
 	},
 ];
 
-
 function Header() {
 	// const headerStyle = {
 	// 	color: "red",
@@ -73,7 +72,7 @@ function Footer() {
 	const hour = new Date().getHours();
 
 	const openHour = 10;
-	const closeHour = 12;
+	const closeHour = 22;
 
 	const isOpen = hour >= openHour && hour <= closeHour;
 	console.log(isOpen);
@@ -82,38 +81,59 @@ function Footer() {
 	// else alert("Sorry, We are closed now!");
 	return (
 		<footer className="footer">
-			{" "}
-			{new Date().toLocaleTimeString()} We are currently open!
+			{isOpen && (
+				<div className="order">
+					<p>
+						We are open until {openHour}:00. Come visit or can order online.
+					</p>
+					<button className="btn">Order</button>
+				</div>
+			)}
 		</footer>
 	);
 }
 
 function Menu() {
-	const pizzaProps = {
-		name: "Pizza Spinaachi veggies",
-		ingredients: "Tomato , cheese, spinach etc",
-		photoName: 'pizzas/spinaci.jpg',
-		price : '₹ 500'
-	}
+	const pizzas = pizzaData;
+	// const pizzas = [];
+	const numPizzas = pizzas.length;
+
 	return (
-		<main className="menu">
-			<h2>Menu</h2>
-			{pizzaData.map((each)=><Pizza {...each}/>)}
-		</main>
+		<>
+			{numPizzas > 0 ? (
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+					veritatis tempore facilis laborum, assumenda ea odit ut quibusdam,
+					facere dolore accusamus quia eaque. Fuga cum vero laboriosam similique
+					tempore fugiat laudantium dolore illum quaerat eos, corrupti est ipsum
+					fugit esse.
+				</p>
+			) : (
+				<p>We don not have any pizzas</p>
+			)}
+			<main className="menu">
+				<h2>Menu</h2>
+				<ul className="pizzas">
+					{pizzas.map((each) => (
+						<Pizza {...each} key={each.name} />
+					))}
+				</ul>
+			</main>
+		</>
 	);
 }
 
-function Pizza(props) {
+function Pizza({ name, price, photoName, ingredients, soldOut }) {
 	return (
-		<div className="pizza" >
-			<img alt={props.name} src={props.photoName}></img>
-			
+		<li className={`pizza ${soldOut ? "sold-out" : ""}`}>
+			<img alt={name} src={photoName}></img>
+
 			<div>
-				<h3>{props.name}</h3>
-				<p>{props.ingredients}</p>
-				<span>Price : {props.price + 3}</span>
+				<h3>{name}</h3>
+				<p>{ingredients}</p>
+				<span>Price : {price}</span>
 			</div>
-		</div>
+		</li>
 	);
 }
 function App() {

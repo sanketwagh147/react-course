@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+// including external css files to react app
+import "./index.css";
+
 const pizzaData = [
 	{
 		name: "Focaccia",
@@ -45,22 +48,80 @@ const pizzaData = [
 	},
 ];
 
-function Pizza() {
+
+function Header() {
+	// const headerStyle = {
+	// 	color: "red",
+	// 	fontSize: "48px",
+	// 	backgroundColor: "#ffbf00",
+	// 	textTransform: "uppercase",
+	// };
+	const headerStyle = {};
 	return (
-		<h2>
-			<img alt="pizza" src="pizzas/spinaci.jpg"></img>
-			<h3>This is Spinaci Pizza Pizza</h3>
-		</h2>
+		<header className="header">
+			<h1 style={headerStyle}>Fast React Pizza Company</h1>
+		</header>
+	);
+}
+
+// //! creating element with create element not recommended
+// function Footer() {
+// return React.createElement("footer", null, "We are currently open!");
+// }
+
+function Footer() {
+	const hour = new Date().getHours();
+
+	const openHour = 10;
+	const closeHour = 12;
+
+	const isOpen = hour >= openHour && hour <= closeHour;
+	console.log(isOpen);
+
+	// if (hour >= openHour && hour <= closeHour) alert("We are Open");
+	// else alert("Sorry, We are closed now!");
+	return (
+		<footer className="footer">
+			{" "}
+			{new Date().toLocaleTimeString()} We are currently open!
+		</footer>
+	);
+}
+
+function Menu() {
+	const pizzaProps = {
+		name: "Pizza Spinaachi veggies",
+		ingredients: "Tomato , cheese, spinach etc",
+		photoName: 'pizzas/spinaci.jpg',
+		price : '₹ 500'
+	}
+	return (
+		<main className="menu">
+			<h2>Menu</h2>
+			{pizzaData.map((each)=><Pizza {...each}/>)}
+		</main>
+	);
+}
+
+function Pizza(props) {
+	return (
+		<div className="pizza" >
+			<img alt={props.name} src={props.photoName}></img>
+			
+			<div>
+				<h3>{props.name}</h3>
+				<p>{props.ingredients}</p>
+				<span>Price : {props.price + 3}</span>
+			</div>
+		</div>
 	);
 }
 function App() {
 	return (
-		<div>
-			<h1>Hello React</h1>;
-			<Pizza />
-			<Pizza />
-			<Pizza />
-			<Pizza />
+		<div className="container">
+			<Header />
+			<Menu />
+			<Footer />
 		</div>
 	);
 }

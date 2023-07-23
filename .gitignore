@@ -1,3 +1,5 @@
-react-course
+# react-course
 *.pdf
 ultimate-react-course
+node_moduules/
+**/node_moduules/**

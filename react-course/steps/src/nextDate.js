@@ -54,6 +54,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default function Counter() {
 	const [counter, setCounter] = useState(0);
 	const [step, setStep] = useState(1);
+	const MIN = 0;
+	const MAX = 10;
+	function handleSlider(e) {
+		setStep(Number(e.target.value));
+	}
 
 	const date = new Date();
 	date.setDate(date.getDate() + counter);
@@ -61,29 +66,34 @@ export default function Counter() {
 		<div>
 			<div className="steps">
 				<div>
-					<button
-						className="btn btn-primary"
-						onClick={() => setStep((c) => c - step)}
-					>
-						-
-					</button>
+					<input
+						type="range"
+						class="form-range"
+						min={MIN}
+						max={MAX}
+						value={step}
+						onChange={(e) => handleSlider(e)}
+					/>
+
 					<span className="alert primary">Step: {step}</span>
-					<button
-						className="btn btn-primary"
-						onClick={() => setStep((c) => c + step)}
-					>
-						+
-					</button>
 				</div>
 				<hr />
-				<div>
+				<div className="test">
 					<button
 						className="btn btn-primary"
 						onClick={() => setCounter((c) => c - step)}
 					>
 						-
 					</button>
-					<span className="alert primary">Count: {counter}</span>
+					<input
+						type="input"
+						class="form-control"
+						min={MIN}
+						max={MAX}
+						value={counter}
+						onChange={(e) => handleSlider(e)}
+					/>
+
 					<button
 						className="btn btn-primary"
 						onClick={() => setCounter((c) => c + step)}
@@ -91,15 +101,29 @@ export default function Counter() {
 						+
 					</button>
 					<hr></hr>
-					<p>
-						{counter === 0
-							? "Today is "
-							: counter > 0
-							? `${counter} days from today is `
-							: `${Math.abs(counter)} days ago today was `}{" "}
-						{date.toDateString()}
-					</p>
 				</div>
+				<div class="badge bg-secondary fs-2 mt-4">
+					{counter === 0
+						? "Today is "
+						: counter > 0
+						? `${counter} days from today is `
+						: `${Math.abs(counter)} days ago today was `}{" "}
+					{date.toDateString()}
+				</div>
+
+				{counter !== 0 || step !== 1 ? (
+					<div className="mt-2">
+						<button
+							className="btn btn-danger"
+							onClick={() => {
+								setCounter(0);
+								setStep(1);
+							}}
+						>
+							Reset
+						</button>
+					</div>
+				) : null}
 			</div>
 		</div>
 	);

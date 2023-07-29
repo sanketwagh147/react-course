@@ -111,20 +111,9 @@ export default function Counter() {
 					{date.toDateString()}
 				</div>
 
-				{counter !== 0 || step !== 1 ? (
-					<div className="mt-2">
-						<button
-							className="btn btn-danger"
-							onClick={() => {
-								setCounter(0);
-								setStep(1);
-							}}
-						>
-							Reset
-						</button>
-					</div>
-				) : null}
+				{counter !== 0 || step !== 1 ? <div className="mt-2"></div> : null}
 			</div>
 		</div>
 	);
 }
+

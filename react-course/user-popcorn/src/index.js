@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import StarRating from "./StarRating";
+// import StarRating from "./StarRating";
 import "./index.css";
 // import "./textExpander.css";
 import TextExpander from "./TextExpander";

@@ -1,6 +1,6 @@
 import { Navbar } from "./Navbar";
 import { Main } from "./Main";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NumResults } from "./NumResults";
 import { Box } from "./Box";
 import { WatchedSummary } from "./WatchedSummary";
@@ -62,19 +62,55 @@ export const tempWatchedData = [
 ];
 
 export const average = (arr) =>
-	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+	arr.reduce((acc, cur, i, arr) => acc + cur / arr?.length, 0);
 
+const OMDB_KEY = "46c63686";
 export default function App() {
-	const [movies, setMovies] = useState(tempMovieData);
-	const [watched, setWatched] = useState(tempWatchedData);
+	// const [movies, setMovies] = useState(tempMovieData);
+	// const [watched, setWatched] = useState(tempWatchedData);
+
+	const [movies, setMovies] = useState([]);
+	const [watched, setWatched] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	useEffect(() => {
+		async function fetchMovies(query) {
+			try {
+				setLoading(true);
+				const res = await fetch(
+					`https://www.omdbapi.com/?i=tt3896198&apikey=${OMDB_KEY}&s=${query}`
+				);
+
+				if (!res.ok)
+					throw new Error(
+						"Something went wrong please check your internet connection"
+					);
+				const data = await res.json();
+				if (data.Response === "False") throw new Error("No movies found");
+				console.log(data);
+				setMovies(data.Search);
+			} catch (error) {
+				console.error(error.message);
+				setError(error.message);
+			} finally {
+				setLoading(false);
+			}
+		}
+		const query = "sldjflj";
+		fetchMovies(query);
+	}, []);
+
 	return (
 		<>
 			<Navbar>
 				<NumResults movies={movies} />
 			</Navbar>
 			<Main>
+				{/* <Box>{loading ? <Loader /> : <MovieList movies={movies} />}</Box> */}
 				<Box>
-					<MovieList movies={movies} />
+					{loading && <Loader />}
+					{!loading && !error && <MovieList movies={movies} />}
+					{error && <ErrorMessage message={error} />}
 				</Box>
 				<Box>
 					{" "}
@@ -86,4 +122,11 @@ export default function App() {
 			</Main>
 		</>
 	);
+}
+
+function Loader() {
+	return <p className="loader">Loading.. </p>;
+}
+function ErrorMessage({ message }) {
+	return <p className="error">❌{message}</p>;
 }

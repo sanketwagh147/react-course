@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import StarRating from "./StarRating";
-// import "./index.css";
-import "./textExpander.css";
+import "./index.css";
+// import "./textExpander.css";
 import TextExpander from "./TextExpander";
-// import App from "./App";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<React.StrictMode>
-		<TextExpander>
+		{/* <TextExpander>
 			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla porro
 			beatae quo accusamus officiis ut sapiente incidunt, cum veniam saepe id.
 			Libero quaerat quo fuga harum aliquid quos id deserunt doloremque
@@ -44,9 +44,9 @@ root.render(
 			Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt sit
 			dolor, maiores asperiores facere amet tempora quis? Doloremque ratione
 			libero officia. Eos nihil sed natus reprehenderit maxime corrupti impedit
-			iure et, voluptatem, quam facilis dicta quia fugit inventore enim harum?
-		</TextExpander>
-		{/* <App /> */}
+			iure et, voluptatem, quam facilis dicta quia fugit inventore enim harum? */}
+		{/* </TextExpander> */}
+		<App />
 		{/* <StarRating
 			maxRating={5}
 			messages={["Excellent", "Great", "Okay", "Bad", "Very Bad"].reverse()}

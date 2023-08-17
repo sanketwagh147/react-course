@@ -8,6 +8,9 @@ import StartScreen from "./StartScreen";
 import Questions from "./Questions";
 import NextButton from "./NextButton";
 import Progress from "./Progress";
+import FinishedScreen from "./FinishedScreen";
+import Timer from "./Timer";
+import Footer from "./Footer";
 
 const initialState = {
 	questions: [],
@@ -16,7 +19,11 @@ const initialState = {
 	currentQuestion: 0,
 	answer: null,
 	points: 0,
+	highscore: 0,
+	secondsLeft: null,
 };
+
+const SECS_PER_QUESTION = 10;
 
 function reducer(state, action) {
 	switch (action.type) {
@@ -25,7 +32,11 @@ function reducer(state, action) {
 		case "dataFailed":
 			return { ...state, status: "error" };
 		case "start":
-			return { ...state, status: "active" };
+			return {
+				...state,
+				status: "active",
+				secondsLeft: state.questions.length * SECS_PER_QUESTION,
+			};
 		case "newAnswer":
 			const question = state.questions.at(state.currentQuestion);
 			const points =
@@ -43,14 +54,39 @@ function reducer(state, action) {
 				currentQuestion: state.currentQuestion + 1,
 				answer: null,
 			};
+		case "finished":
+			return {
+				...state,
+				status: "finished",
+				highscore:
+					state.points > state.highscore ? state.points : state.highscore,
+			};
+		case "reset":
+			return { ...initialState, questions: state.questions, status: "ready" };
+		case "tick":
+			return {
+				...state,
+				secondsLeft: state.secondsLeft - 1,
+				status: state.secondsLeft <= 0 ? "finished" : state.status,
+			};
 		default:
 			throw new Error("Action is unknown");
 	}
 }
 
 export default function App() {
-	const [{ questions, status, currentQuestion, answer, points }, dispatch] =
-		useReducer(reducer, initialState);
+	const [
+		{
+			questions,
+			status,
+			currentQuestion,
+			answer,
+			points,
+			highscore,
+			secondsLeft,
+		},
+		dispatch,
+	] = useReducer(reducer, initialState);
 
 	const numQuestions = questions.length;
 	const maxPoints = questions.reduce((prev, curr) => prev + curr.points, 0);
@@ -85,8 +121,24 @@ export default function App() {
 							dispatch={dispatch}
 							answer={answer}
 						/>
-						<NextButton dispatch={dispatch} answer={answer} />
+						<Footer>
+							<Timer secondsLeft={secondsLeft} dispatch={dispatch} />
+							<NextButton
+								dispatch={dispatch}
+								answer={answer}
+								currentQuestion={currentQuestion}
+								numQuestions={numQuestions}
+							/>
+						</Footer>
 					</>
+				)}
+				{status === "finished" && (
+					<FinishedScreen
+						points={points}
+						maxPoints={maxPoints}
+						highscore={highscore}
+						dispatch={dispatch}
+					/>
 				)}
 			</Main>
 		</div>

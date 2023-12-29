@@ -3,8 +3,11 @@ import styles from "./CountryList.module.css";
 import Spinner from "./Spinner";
 import Message from "./Message";
 import CountryItem from "./CountryItem";
+import { useCities } from "../contexts/CitiesContext";
 
-export default function CountryList({ cities, isLoading }) {
+export default function CountryList() {
+	const { cities, isLoading } = useCities();
+
 	console.error(typeof cities);
 	console.error("IsLoading", isLoading);
 	if (isLoading) return <Spinner />;

@@ -13,7 +13,6 @@ function CitiesProvider({ children }) {
 			try {
 				setIsLoading(true);
 				const apiUrl = `${BASE_URL}/cities`;
-				console.log(apiUrl);
 				const res = await fetch(apiUrl);
 				const data = await res.json();
 
@@ -30,7 +29,6 @@ function CitiesProvider({ children }) {
 		try {
 			setIsLoading(true);
 			const apiUrl = `${BASE_URL}/cities/${id}`;
-			console.log(apiUrl);
 			const res = await fetch(apiUrl);
 			const data = await res.json();
 
@@ -41,8 +39,50 @@ function CitiesProvider({ children }) {
 		}
 	}
 
+	async function createCity(newCity) {
+		try {
+			setIsLoading(true);
+			const apiUrl = `${BASE_URL}/cities/`;
+			const res = await fetch(apiUrl, {
+				method: "POST",
+				body: JSON.stringify(newCity),
+				headers: { "Content-Type": "application/json" },
+			});
+			const data = await res.json();
+			console.log(data);
+			setCities((cities) => [...cities, data]);
+		} catch {
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
+	async function deleteCity(id) {
+		try {
+			setIsLoading(true);
+			const apiUrl = `${BASE_URL}/cities/${id}`;
+			const res = await fetch(apiUrl, {
+				method: "DELETE",
+			});
+			setCities((cities) => cities.filter((city) => city.id !== city));
+		} catch {
+			alert("There was an error deleting the city");
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
 	return (
-		<CitiesContext.Provider value={{ cities, isLoading, currentCity, getCity }}>
+		<CitiesContext.Provider
+			value={{
+				cities,
+				isLoading,
+				currentCity,
+				getCity,
+				createCity,
+				deleteCity,
+			}}
+		>
 			{children}
 		</CitiesContext.Provider>
 	);

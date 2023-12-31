@@ -13,14 +13,14 @@ import {
 import { useCities } from "../contexts/CitiesContext";
 import { useGeolocation } from "../hooks/useGeolocation";
 import Button from "./Button";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 
 export default function Map() {
 	const { cities } = useCities();
 	const [mapPosition, setMapPosition] = useState([40, 0]);
 
-	const [searchParams] = useSearchParams();
-	const mapLat = searchParams.get("lat") || 40;
-	const mapLng = searchParams.get("lng") || 0;
+	const [mapLat, mapLng] = useUrlPosition();
+
 	const {
 		isLoading: isLoadingPosition,
 		position: geoLocationPosition,
@@ -36,7 +36,6 @@ export default function Map() {
 
 	useEffect(() => {
 		if (geoLocationPosition) {
-			console.log(geoLocationPosition);
 			setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
 		}
 	}, [geoLocationPosition]);
@@ -80,8 +79,6 @@ export default function Map() {
 }
 
 function ChangeCenter({ position }) {
-	console.log(position);
-
 	const map = useMap();
 	if (position) map.setView(position);
 	return null;
@@ -91,8 +88,6 @@ function DetectClick() {
 	const navigate = useNavigate();
 	useMapEvents({
 		click: (e) => {
-			console.log(e);
-
 			navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
 		},
 	});

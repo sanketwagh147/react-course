@@ -75,7 +75,7 @@ function CitiesProvider({ children }) {
 	}, []);
 
 	async function getCity(id) {
-		if (Number(i) === currentCity.id) return;
+		if (Number(id) === currentCity.id) return;
 		dispatch({ type: "loading" });
 		try {
 			// setIsLoading(true);

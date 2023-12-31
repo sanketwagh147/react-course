@@ -13,6 +13,7 @@ import City from "./components/City";
 import Form from "./components/Form";
 import { CitiesProvider } from "./contexts/CitiesContext";
 import { AuthProvider } from "./contexts/FakeAuthContext";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
 	return (
@@ -29,7 +30,14 @@ function App() {
 						<Route path="/pricing" element={<Pricing />} />
 						<Route path="/login" element={<Login />} />
 						{/* Nested Routes */}
-						<Route path="/app" element={<AppLayout />}>
+						<Route
+							path="/app"
+							element={
+								<ProtectedRoute>
+									<AppLayout />
+								</ProtectedRoute>
+							}
+						>
 							{/* defaul index route if nothing matches */}
 							{/* Use <Navigate> to redirect */}
 							{/* replace is used so that back button works (for history*/}

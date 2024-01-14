@@ -1,4 +1,4 @@
-function getPosition() {
+/* function getPosition() {
 	return new Promise(function (resolve, reject) {
 		navigator.geolocation.getCurrentPosition(resolve, reject);
 	});
@@ -19,3 +19,29 @@ async function fetchAddress() {
 	// 3) Then we return an object with the data that we are interested in
 	return { position, address };
 }
+ */
+
+import { createSlice } from "@reduxjs/toolkit";
+
+//React tool kit
+
+// 1: initial state
+const initialState = {
+  username: "",
+};
+
+// Create a slice
+// 1. Name of slice 2. initial state, and reducers
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    updateName(state, action) {
+      state.username = action.payload;
+    },
+  },
+});
+
+export const { updateName } = userSlice.actions;
+
+export default userSlice.reducer;

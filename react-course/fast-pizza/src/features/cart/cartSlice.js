@@ -53,3 +53,5 @@ export const getTotalCartPrice = function (state) {
     0,
   );
 };
+
+export const getCart = (state) => state.cart.cart;

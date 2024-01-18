@@ -2,8 +2,8 @@
 
 import styled from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
-import { Button } from "./ui/Button";
-import {Input}
+import Button from "./ui/Button";
+import Input from "./ui/Input";
 
 const H1 = styled.h1`
 	font-size: 30px;
@@ -19,8 +19,7 @@ export default function App() {
 	return (
 		<>
 			{/* Global styles imported for styled components must be siblings with Component */}
-			<GlobalStyles />import Input from './ui/Input';
-
+			<GlobalStyles />
 			<StyledApp>
 				<H1>The Wild Oasis</H1>
 				<Button>Check In</Button>

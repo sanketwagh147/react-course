@@ -23,3 +23,7 @@ plugins: [react(), eslint()],
 `
 
 ### Delete assets folder App.css index.css as they are not used
+
+### for react router
+
+npm i react-router-dom@6

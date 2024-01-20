@@ -32,6 +32,7 @@ import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import GlobalStyles from "./styles/GlobalStyles";
+import AppLayout from "./ui/AppLayout";
 
 // 			<Row>
 // 				<StyledApp>
@@ -67,13 +68,18 @@ export default function App() {
 
 			<BrowserRouter>
 				<Routes>
-					<Route index element={<Navigate replace to="dashboard" />} />
-					<Route path="dashboard" element={<Dashboard />} />
-					<Route path="bookings" element={<Bookings />} />
-					<Route path="cabins" element={<Cabins />} />
-					<Route path="users" element={<NewUsers />} />
-					<Route path="settings" element={<Settings />} />
-					<Route path="account" element={<Account />} />
+					{/* The app layout will be parent and will render for all child components  */}
+					{/* //✅ Outlet Component must be passed for this AppLayout to work in individual components */}
+					<Route element={<AppLayout />}>
+						{/* The above route is layout path as it does not have the path prop */}
+						<Route index element={<Navigate replace to="dashboard" />} />
+						<Route path="dashboard" element={<Dashboard />} />
+						<Route path="bookings" element={<Bookings />} />
+						<Route path="cabins" element={<Cabins />} />
+						<Route path="users" element={<NewUsers />} />
+						<Route path="settings" element={<Settings />} />
+						<Route path="account" element={<Account />} />
+					</Route>
 					<Route path="login" element={<Login />} />
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>

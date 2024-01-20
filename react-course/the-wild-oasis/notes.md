@@ -27,3 +27,7 @@ plugins: [react(), eslint()],
 ### for react router
 
 npm i react-router-dom@6
+
+###
+
+npm i react-icons

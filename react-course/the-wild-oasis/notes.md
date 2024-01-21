@@ -26,8 +26,16 @@ plugins: [react(), eslint()],
 
 ### for react router
 
-npm i react-router-dom@6
+`npm i react-router-dom@6`
 
 ###
 
-npm i react-icons
+`npm i react-icons`
+
+### React query
+
+`npm i @tanstack/react-query@4`
+
+### Date library like dateutils
+
+`npm i date-fns`

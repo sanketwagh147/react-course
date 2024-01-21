@@ -30,7 +30,7 @@ function CreateCabinForm() {
 
 	function onSubmit(data) {
 		console.log(data);
-		mutate(data);
+		mutate({ ...data, image: data.image[0] });
 	}
 
 	function onError(errors) {
@@ -63,7 +63,7 @@ function CreateCabinForm() {
 				/>
 			</FormRow>
 
-			<FormRow label="regularPrice" error={errors?.regularPrice?.message}>
+			<FormRow label="Regular price" error={errors?.regularPrice?.message}>
 				<Input
 					type="number"
 					disabled={isCreating}
@@ -107,7 +107,7 @@ function CreateCabinForm() {
 			</FormRow>
 
 			<FormRow label="Cabin Image" error={errors?.image?.message}>
-				<FileInput id="image" accept="image/*" />
+				<FileInput id="image" accept="image/*" {...register("image")} />
 			</FormRow>
 
 			<FormRow label="">

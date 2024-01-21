@@ -39,3 +39,11 @@ plugins: [react(), eslint()],
 ### Date library like dateutils
 
 `npm i date-fns`
+
+### React toasts
+
+`npm i react-hot-toast`
+
+### React form library
+
+`npm i react-hook-form`

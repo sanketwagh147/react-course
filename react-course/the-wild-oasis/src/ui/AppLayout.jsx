@@ -14,6 +14,14 @@ const StyledAppLayout = styled.div`
 	grid-template-rows: auto 1fr;
 	height: 100vh;
 `;
+
+const Container = styled.div`
+	max-width: 120rem;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 3.2rem;
+`;
 export default function AppLayout() {
 	return (
 		<StyledAppLayout>
@@ -21,7 +29,9 @@ export default function AppLayout() {
 			<Sidebar />
 			<Main>
 				{/* This will be passed and needed for passing route and the outlet will be render */}
-				<Outlet />
+				<Container>
+					<Outlet />
+				</Container>
 			</Main>
 		</StyledAppLayout>
 	);

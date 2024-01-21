@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import supabase from "./supabase";
 
 export async function getCabins() {
@@ -5,16 +6,27 @@ export async function getCabins() {
 
 	if (error) {
 		console.error(error);
-		throw new Error("Failed to load cabins from table");
+		throw new Error("Cabins failed to load");
 	}
 	return data;
+}
+
+export async function createCabin(newCabin) {
+	const { data, error } = await supabase
+		.from("cabins")
+		.insert([newCabin])
+		.select();
+	if (error) {
+		console.error(error);
+		throw new Error("Inserting Cabin failed");
+	}
 }
 
 export async function deleteCabin(id) {
 	const { data, error } = await supabase.from("cabins").delete().eq("id", id);
 	if (error) {
 		console.error(error);
-		throw new Error("Failed deleting the cabin");
+		throw new Error("");
 	}
 	return data;
 }

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
 const TableRow = styled.div`
 	display: grid;
 	grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
@@ -64,14 +65,14 @@ export default function CabinRow({ cabin }) {
 		mutationFn: deleteCabin,
 		// Onsuccess invalidate the cache so the data is fetched again
 		onSuccess: () => {
-			alert(`Cabin : ${name} is deleted`);
+			toast.success(`Cabin : ${name} is deleted`);
 			queryClient.invalidateQueries({
 				// Same query key when set using useQuery( react-query)
 				queryKey: ["cabins"],
 			});
 		},
 		// on Error Handler
-		onError: (err) => alert(err.message),
+		onError: (err) => toast.error(err.message),
 	});
 	return (
 		<TableRow role="row">

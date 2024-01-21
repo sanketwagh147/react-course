@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
 
-import { formatCurrency } from "../../utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
 import { useState } from "react";
+import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
+import useDeleteCabin from "./useDeleteCabin";
 const TableRow = styled.div`
 	display: grid;
 	grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr 1fr;
@@ -48,6 +46,8 @@ const Discount = styled.div`
 
 export default function CabinRow({ cabin }) {
 	const [showForm, setShowForm] = useState(false);
+	const { isDeleting, deleteCabin } = useDeleteCabin();
+
 	const {
 		id: cabinId,
 		name,
@@ -58,26 +58,6 @@ export default function CabinRow({ cabin }) {
 		description,
 	} = cabin;
 
-	// 📌 Hook that gets the query client from App.jsx to invalidate the cache
-	const queryClient = useQueryClient();
-
-	//uses react query to mutate data
-	// mutate is cb fn which we can connect t
-	const { isLoading: isDeleting, mutate } = useMutation({
-		// Below both function does the same thing
-		// mutationFn: (id) => deleteCabin(id),
-		mutationFn: deleteCabin,
-		// Onsuccess invalidate the cache so the data is fetched again
-		onSuccess: () => {
-			toast.success(`Cabin : ${name} is deleted`);
-			queryClient.invalidateQueries({
-				// Same query key when set using useQuery( react-query)
-				queryKey: ["cabins"],
-			});
-		},
-		// on Error Handler
-		onError: (err) => toast.error(err.message),
-	});
 	return (
 		<>
 			<TableRow role="row">
@@ -85,11 +65,15 @@ export default function CabinRow({ cabin }) {
 				<Cabin>{name}</Cabin>
 				<div>Fits up to {maxCapacity}</div>
 				<Price>{formatCurrency(regularPrice)}</Price>
-				<Discount>{formatCurrency(discount)}</Discount>
+				{discount ? (
+					<Discount>{formatCurrency(discount)}</Discount>
+				) : (
+					<span>&mdash;</span>
+				)}
 				<div>{description}</div>
 				<div>
 					<button onClick={() => setShowForm((show) => !show)}>Edit</button>
-					<button onClick={() => mutate(cabinId)} disabled={isDeleting}>
+					<button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
 						Delete
 					</button>
 				</div>

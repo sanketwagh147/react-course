@@ -2,7 +2,14 @@ import styled from "styled-components";
 
 import { HiXMark } from "react-icons/hi2";
 import { createPortal } from "react-dom";
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+	cloneElement,
+	createContext,
+	useContext,
+	useRef,
+	useState,
+} from "react";
+import useOutsideClick from "../hooks/useOutsideHook";
 const StyledModal = styled.div`
 	position: fixed;
 	top: 50%;
@@ -71,13 +78,13 @@ function Modal({ children }) {
 	);
 }
 
-function Open({ children, opensWindowName }) {
-	console.log(opensWindowName);
+function Open({ children, opens }) {
+	console.log(opens);
 
 	const { open } = useContext(ModalContext);
 	console.log("opening opne");
 
-	return cloneElement(children, { onClick: () => open(opensWindowName) });
+	return cloneElement(children, { onClick: () => open(opens) });
 }
 
 // eslint-disable-next-line react/prop-types
@@ -89,11 +96,12 @@ function Window({ children, opensWindowName }) {
 	// The main reason to use react portal is to avoid clashes with overflow hidden in the parent element i.e if it is in some component which has overflow which is hidden overflow may be cut off ch:367 react udemy
 	console.log("window", openName);
 
+	const ref = useOutsideClick(close);
 	if (opensWindowName !== openName) return null;
 
 	return createPortal(
 		<Overlay>
-			<StyledModal>
+			<StyledModal ref={ref}>
 				<Button onClick={close}>
 					<HiXMark />
 				</Button>

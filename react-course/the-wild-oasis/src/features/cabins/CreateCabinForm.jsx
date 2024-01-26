@@ -11,7 +11,7 @@ import Textarea from "../../ui/Textarea";
 import useCreateCabin from "./useCreateCabin";
 import useEditCabin from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
 	const { isCreating, createCabin } = useCreateCabin();
 	const { isEditing, editCabin } = useEditCabin();
 	const isWorking = isCreating || isEditing;
@@ -37,7 +37,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
 			createCabin(
 				{ ...data, image: data.image[0] },
-				{ onSuccess: (data) => reset() }
+				{
+					onSuccess: (data) => {
+						reset();
+						onCloseModal?.();
+					},
+				}
 			);
 		}
 	}
@@ -47,7 +52,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 	}
 
 	return (
-		<Form onSubmit={handleSubmit(onSubmit, onError)}>
+		<Form
+			onSubmit={handleSubmit(onSubmit, onError)}
+			type={onCloseModal ? "modal" : "regular"}
+		>
 			<FormRow label="Cabin name" error={errors?.name?.message}>
 				<Input
 					type="text"
@@ -127,7 +135,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
 			<FormRow label="">
 				{/* type is an HTML attribute! */}
-				<Button variation="secondary" type="reset">
+				<Button
+					variation="secondary"
+					type="reset"
+					//Optional chaining if the func is undefined don't call it
+					onClick={() => onCloseModal?.()}
+				>
 					Cancel
 				</Button>
 				<Button disabled={isWorking}>

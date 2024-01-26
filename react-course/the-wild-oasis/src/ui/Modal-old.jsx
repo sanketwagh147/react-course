@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 import { HiXMark } from "react-icons/hi2";
 import { createPortal } from "react-dom";
-import { cloneElement, createContext, useContext, useState } from "react";
 const StyledModal = styled.div`
 	position: fixed;
 	top: 50%;
@@ -52,60 +51,25 @@ const Button = styled.button`
 	}
 `;
 
-// Creating a compound Component
-
-// 1 Create a context
-const ModalContext = createContext();
-
-// eslint-disable-next-line react/prop-types
-function Modal({ children }) {
-	const [openName, setOpenName] = useState("");
-
-	const close = () => setOpenName("");
-	const open = setOpenName;
-
-	return (
-		<ModalContext.Provider value={{ openName, close, open }}>
-			{children}
-		</ModalContext.Provider>
-	);
-}
-
-function Open({ children, opensWindowName }) {
-	console.log(opensWindowName);
-
-	const { open } = useContext(ModalContext);
-	console.log("opening opne");
-
-	return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
-
 // eslint-disable-next-line react/prop-types
 // eslint-disable-next-line react/prop-types
-function Window({ children, opensWindowName }) {
-	const { openName, close } = useContext(ModalContext);
+function Modal({ children, onClose }) {
 	//React Portal good for modals tool tips
 	//renders component anywhere while keeping it in the DOM
 	// The main reason to use react portal is to avoid clashes with overflow hidden in the parent element i.e if it is in some component which has overflow which is hidden overflow may be cut off ch:367 react udemy
-	console.log("window", openName);
-
-	if (opensWindowName !== openName) return null;
 
 	return createPortal(
 		<Overlay>
 			<StyledModal>
-				<Button onClick={close}>
+				<Button onClick={onClose}>
 					<HiXMark />
 				</Button>
-
-				<div>{cloneElement(children, { onCloseModal: close })}</div>
+				<div>{children}</div>
 			</StyledModal>
 		</Overlay>,
 		//Don node where we want to render
 		document.body
 	);
 }
-Modal.Open = Open;
-Modal.Window = Window;
 
 export default Modal;

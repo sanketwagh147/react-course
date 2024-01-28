@@ -1,15 +1,9 @@
-import styled from "styled-components";
-
-import { HiXMark } from "react-icons/hi2";
+import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-	cloneElement,
-	createContext,
-	useContext,
-	useRef,
-	useState,
-} from "react";
-import useOutsideClick from "../hooks/useOutsideHook";
+import { HiXMark } from "react-icons/hi2";
+import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
+
 const StyledModal = styled.div`
 	position: fixed;
 	top: 50%;
@@ -59,12 +53,8 @@ const Button = styled.button`
 	}
 `;
 
-// Creating a compound Component
-
-// 1 Create a context
 const ModalContext = createContext();
 
-// eslint-disable-next-line react/prop-types
 function Modal({ children }) {
 	const [openName, setOpenName] = useState("");
 
@@ -78,26 +68,17 @@ function Modal({ children }) {
 	);
 }
 
-function Open({ children, opens }) {
-	console.log(opens);
-
+function Open({ children, opens: opensWindowName }) {
 	const { open } = useContext(ModalContext);
-	console.log("opening opne");
 
-	return cloneElement(children, { onClick: () => open(opens) });
+	return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
-// eslint-disable-next-line react/prop-types
-// eslint-disable-next-line react/prop-types
-function Window({ children, opensWindowName }) {
+function Window({ children, name }) {
 	const { openName, close } = useContext(ModalContext);
-	//React Portal good for modals tool tips
-	//renders component anywhere while keeping it in the DOM
-	// The main reason to use react portal is to avoid clashes with overflow hidden in the parent element i.e if it is in some component which has overflow which is hidden overflow may be cut off ch:367 react udemy
-	console.log("window", openName);
-
 	const ref = useOutsideClick(close);
-	if (opensWindowName !== openName) return null;
+
+	if (name !== openName) return null;
 
 	return createPortal(
 		<Overlay>
@@ -109,10 +90,10 @@ function Window({ children, opensWindowName }) {
 				<div>{cloneElement(children, { onCloseModal: close })}</div>
 			</StyledModal>
 		</Overlay>,
-		//Don node where we want to render
 		document.body
 	);
 }
+
 Modal.Open = Open;
 Modal.Window = Window;
 
